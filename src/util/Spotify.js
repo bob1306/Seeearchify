@@ -58,7 +58,6 @@ let Spotify = {
       };
       let userId;
       let playlistId;
-      let trackId;
 
       return fetch('https://api.spotify.com/v1/me', {headers: headers}).then(response => {
         if(response.ok) {
@@ -88,7 +87,7 @@ let Spotify = {
         method: 'POST',
         headers: headers,
         'Content-Type': 'application/json',
-        'uris': trackURIs
+        body: JSON.stringify({uris: trackURIs})
       });
     });
   });

@@ -9,7 +9,7 @@ import Spotify from '../../util/Spotify';
 class App extends Component {
   constructor(props) {
     super(props);
-    const track1 = {
+/*    const track1 = {
       name: 'name',
       artist: 'artist',
       album: 'album',
@@ -20,7 +20,7 @@ class App extends Component {
       artist: 'artist2',
       album: 'album2',
       id: 'id2'
-    }
+    }*/
     this.state = {
       searchResults: [
         //track1,
