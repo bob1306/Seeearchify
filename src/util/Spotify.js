@@ -13,7 +13,7 @@ let Spotify = {
       const expireInMatch = window.location.href.match(/expires_in=([^&]*)/);
       console.log(accessTokenMatch, expireInMatch);
       accessToken = accessTokenMatch[1];
-      expiresIn = expireInMatch[1];
+      expiresIn = Number(expireInMatch[1]);
 
       window.setTimeout(() => accessToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
@@ -26,7 +26,7 @@ let Spotify = {
   search(term) {
     accessToken = Spotify.getAccessToken();
     const endpointUrl = `${url}type=track&q=${term}`;
-    fetch(endpointUrl, {
+    return fetch(endpointUrl, {
       headers: {Authorization: `Bearer ${accessToken}`}
     }).then(response => {
       if(response.ok) {
@@ -49,7 +49,7 @@ let Spotify = {
   });
   },
   savePlaylist(playlistName, trackURIs) {
-    if(!playlistName||trackURIs) {
+    if(!playlistName||!trackURIs.length) {
       return;
     };
       let accessToken = this.getAccessToken();
@@ -58,6 +58,7 @@ let Spotify = {
       };
       let userId;
       let playlistId;
+      let trackId;
 
       return fetch('https://api.spotify.com/v1/me', {headers: headers}).then(response => {
         if(response.ok) {
@@ -67,21 +68,30 @@ let Spotify = {
       }, networkError => console.log(networkError.message)
     ).then(jsonResponse => {
       userId = jsonResponse.id;
-    });
 
-    return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({name: playlistName})
-    }).then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      throw new Error('Request failed!');
-    }, networkError => console.log(networkError.message)
-  ).then(jsonResponse => {
-    playlistId = jsonResponse.id;
-  })
+
+      return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        method: 'POST',
+        headers: headers,
+        'Content-Type': 'application/json',
+        body: JSON.stringify({name: playlistName})
+      }).then(response => {
+        if(response.ok) {
+          return response.json();
+        }
+        throw new Error('Request failed!');
+      }, networkError => console.log(networkError.message)
+    ).then(jsonResponse => {
+      playlistId = jsonResponse.id;
+
+      return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: 'POST',
+        headers: headers,
+        'Content-Type': 'application/json',
+        'uris': trackURIs
+      });
+    });
+  });
   }
 };
 
