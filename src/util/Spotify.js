@@ -1,13 +1,16 @@
 let accessToken;
 let expiresIn;
-const redirectUri = 'http://jammmingbybob.surge.sh';
+//const redirectUri = 'http://jammmingbybob.surge.sh';
+const redirectUri = 'http://localhost:3000/';
 const clientId = 'd1c71e4e71834211a5ddf438427205f1';
 const url = 'https://api.spotify.com/v1/search?';
 
 let Spotify = {
   getAccessToken() {
     if(accessToken) {
-      return accessToken;
+      localStorage.setItem('accessPrevious', accessToken);
+      const access = localStorage.getItem('accessPrevious');
+      return access;
     } else if (window.location.href.match(/access_token=([^&]*)/)&&window.location.href.match(/expires_in=([^&]*)/)) {
       const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
       const expireInMatch = window.location.href.match(/expires_in=([^&]*)/);
@@ -17,6 +20,9 @@ let Spotify = {
 
       window.setTimeout(() => accessToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
+
+      localStorage.setItem('accessPrevious', accessToken);
+
       return accessToken;
     } else {
       const endpoint = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
@@ -58,7 +64,7 @@ let Spotify = {
       };
       let userId;
       let playlistId;
-
+//get user ID
       return fetch('https://api.spotify.com/v1/me', {headers: headers}).then(response => {
         if(response.ok) {
           return response.json();
@@ -68,7 +74,7 @@ let Spotify = {
     ).then(jsonResponse => {
       userId = jsonResponse.id;
 
-
+//get playlist ID and save the playlist name
       return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
         method: 'POST',
         headers: headers,
@@ -82,7 +88,7 @@ let Spotify = {
       }, networkError => console.log(networkError.message)
     ).then(jsonResponse => {
       playlistId = jsonResponse.id;
-
+//save tracks
       return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         method: 'POST',
         headers: headers,

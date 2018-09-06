@@ -27,7 +27,7 @@ class App extends Component {
         //track1,
         //track1
       ],
-      playlistName: 'playlistName',
+      playlistName: 'New Playlist',
       playlistTracks: [
         //track2
       ]
@@ -73,12 +73,19 @@ class App extends Component {
     Spotify.search(term).then(searchResult => {this.setState({searchResults: searchResult})});
   }
 
+  componentWillMount(term) {
+    const access = localStorage.getItem('accessPrevious');
+    if(access) {
+      Spotify.search(term);
+    }
+  }
+
   render() {
     return (
       <div>
-        <h1>Ja<span className="highlight">mmm</span>ing</h1>
-        <div className="App">
-          <SearchBar onSearch={this.search} />
+        <h1>See<span className="highlight">ear</span>chify</h1>
+        <div className="App" >
+          <SearchBar onSearch={this.search}  />
           <div className="App-playlist">
           <SearchResults
             searchResults={this.state.searchResults}
