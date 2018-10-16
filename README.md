@@ -2,7 +2,7 @@
 
 Seeearchify is a Web Application for you to create a Spotify playlist and save in your own account. The Application was made with React.js and you can try a live version [here](http://seeearchifybybob.surge.sh).
 
-![Seeearchify](../preview.png)
+![Seeearchify](./preview.png)
 
 To being, simply search for tracks, you will be directed to login to you Spotify account. Then add tracks to your playlist and click `SAVE TO SPOTIFY`. You should see your new playlist at [Your Spotify Library](https://open.spotify.com/collection/playlists).
 
