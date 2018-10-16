@@ -10,7 +10,9 @@ To being, simply search for tracks, you will be directed to login to you Spotify
 ### Features
 
 -Pressing enter triggers a search
+
 -After user redirects on login, restoring the search term from before the redirect action
+
 -If the user reopens the page of Seeearchify after they already tried to log in, prevent the page refresh when the user triggers the search button
 
 Further detail can be found in the [Design Document](https://docs.google.com/document/d/1m_Tsg2ecNVikJIqJVIDqlbzfAqyVA_QL4wuo627Lbp8/edit?usp=sharing) of Seeearchify.
